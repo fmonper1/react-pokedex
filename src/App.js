@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useReducer } from "react";
+import "./App.css";
+import PokemonInfo from "./components/PokemonInfo";
+import SearchParams from "./components/SearchParams";
+import PokemonContext from "./context/Pokemon.store";
 
-function App() {
+const App = () => {
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case "SET_POKEMON":
+        return { ...state, pokemon: action.payload.pokemon };
+
+      default:
+        break;
+    }
+  };
+  const store = {
+    pokemon: {
+      name: "Pikachu",
+    },
+  };
+  const [state, dispatch] = useReducer(reducer, store);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <PokemonContext.Provider value={{ state, dispatch }}>
+      <div className="App">
+        <SearchParams />
+        <PokemonInfo />
+      </div>
+    </PokemonContext.Provider>
   );
-}
+};
 
 export default App;
